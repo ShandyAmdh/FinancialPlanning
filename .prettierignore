@@ -1,0 +1,9 @@
+# tidak boleh diformat pretier
+
+/bootstrap
+
+/vendor
+
+/public
+
+/storage

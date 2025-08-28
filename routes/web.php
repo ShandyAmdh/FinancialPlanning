@@ -1,26 +1,35 @@
 <?php
 
-use App\Http\Controllers\AnnualReportController;
-use App\Http\Controllers\AnualReportController;
-use App\Http\Controllers\AssetController;
-use App\Http\Controllers\BalanceController;
-use App\Http\Controllers\BudgetController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ExpenseController;
-use App\Http\Controllers\FinancialSuggestionController;
+use App\Models\Goal;
+use App\Models\User;
+use Inertia\Inertia;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Application;
 use App\Http\Controllers\GoalController;
+use App\Http\Controllers\SesiController;
+use Illuminate\Support\Facades\Password;
+use App\Http\Controllers\AssetController;
+use Illuminate\Auth\Events\PasswordReset;
+use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\IncomeController;
-use App\Http\Controllers\LiabilityController;
-use App\Http\Controllers\NetWorthAssetController;
-use App\Http\Controllers\NetWorthController;
-use App\Http\Controllers\NetWorthLiabilityController;
+use App\Http\Controllers\BalanceController;
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\NetWorthController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LiabilityController;
+use App\Http\Controllers\AnualReportController;
+use App\Http\Controllers\AnnualReportController;
+use App\Http\Controllers\Auth\PasswordController;
+use App\Http\Controllers\NetWorthAssetController;
 use App\Http\Controllers\ReportTrackingController;
-use App\Models\Goal;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
+use App\Http\Controllers\NetWorthLiabilityController;
+use App\Http\Controllers\FinancialSuggestionController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 // Route::get('/', function () {
 //     return Inertia::render('Welcome', [
@@ -31,9 +40,61 @@ use Inertia\Inertia;
 //     ]);
 // });
 
-Route::get('/forgot-password', function () {
-    return view('auth.forgot-password');
-})->middleware('guest')->name('password.request');
+// Lupa password
+Route::middleware('guest')->group(function () {
+    Route::get('/', [AuthenticatedSessionController::class, 'create'])->name('login');
+
+    Route::get('/forgot-password', function () {
+        return Inertia ('Auth.ForgotPassword',[
+            'status' => session('status')
+        ]);
+    })->name('password.request');
+
+    Route::post('/forgot-password', function (Request $request) {
+    $request->validate(['email' => 'required|email']);
+    $status = Password::sendResetLink(
+        $request->only('email')
+    );
+
+    return $status === Password::ResetLinkSent
+        ? back()->with(['status' => __($status)])
+        : back()->withErrors(['email' => __($status)]);
+})->name('password.email');
+
+Route::get('/reset-password/{token}', function (string $token) {
+    return Inertia ('Auth.ResetPassword', ['token' => $token]);
+})->name('password.reset');
+
+Route::post('/reset-password', function (Request $request) {
+    $request->validate([
+        'token' => 'required',
+        'email' => 'required|email',
+        'password' => 'required|min:8|confirmed',
+    ]);
+
+    $status = Password::reset(
+        $request->only('email', 'password', 'password_confirmation', 'token'),
+        function (User $user, string $password) {
+            $user->forceFill([
+                'password' => Hash::make($password)
+            ])->setRememberToken(Str::random(60));
+
+            $user->save();
+
+            event(new PasswordReset($user));
+        }
+    );
+
+    return $status === Password::PasswordReset
+        ? redirect()->route('login')->with('status', __($status))
+        : back()->withErrors(['email' => [__($status)]]);
+})->name('password.update');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/change-password', [PasswordController::class, 'changePassword'])->name('change-password');
+    Route::post('/change-password', [PasswordController::class, 'processChangePassword'])->name('process-change-password');
+});
 
 Route::controller(DashboardController::class)->group(function(){
     Route::get('dashboard', 'index')->name('dashboard');

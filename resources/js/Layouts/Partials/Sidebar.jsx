@@ -14,6 +14,7 @@ import {
     IconLogs,
     IconMenorah,
     IconMoneybag,
+    IconRestore,
 } from '@tabler/icons-react';
 
 import { usePage } from '@inertiajs/react';
@@ -123,6 +124,12 @@ export default function Sidebar({ auth: propsAuth, url }) {
                     icon={IconCalendarEvent}
                 />
                 <div className="px-3 py-2 font-medium text-muted-foreground">Lainnya</div>
+                <NavLink
+                    url={route('change-password')}
+                    active={url.startsWith('/change-password')}
+                    title="Ganti Password"
+                    icon={IconRestore}
+                />
                 <NavLink
                     as="button"
                     method="post"

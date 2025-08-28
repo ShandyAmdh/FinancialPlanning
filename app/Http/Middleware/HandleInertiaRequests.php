@@ -42,6 +42,8 @@ class HandleInertiaRequests extends Middleware
             'flash_message' => fn () => [
                 'type' => $request->session()->get('type'),
                 'message' => $request->session()->get('message'),
+                'status' => fn () => $request->session()->get('status'),
+                'error'  => fn () => $request->session()->get('error'),
             ],
             'ziggy' => fn () => [
                 ...(new Ziggy)->toArray(),

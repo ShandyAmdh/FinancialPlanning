@@ -1,5 +1,6 @@
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import InputError from '@/Components/InputError';
+import { Alert, AlertDescription } from '@/Components/ui/alert';
 import { Button } from '@/Components/ui/button';
 import { Card, CardContent } from '@/Components/ui/card';
 import { Input } from '@/Components/ui/input';
@@ -22,7 +23,7 @@ export default function ForgotPassword({ status }) {
         <div className="flex flex-col gap-6">
             <Card className="overflow-hidden">
                 <CardContent className="grid p-0 md:grid-cols-2">
-                    <form onSubmit={onHandleSubmit} className="p-6 md:p-8">
+                    <form onSubmit={onHandleSubmit} className="p-6 md:p-8" method="POST">
                         <div className="flex flex-col gap-6">
                             <div className="flex flex-col items-center text-center">
                                 <ApplicationLogo />

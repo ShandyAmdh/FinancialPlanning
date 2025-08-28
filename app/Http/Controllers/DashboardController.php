@@ -57,7 +57,6 @@ class DashboardController extends Controller implements HasMiddleware
         ->where([
             ['user_id', Auth::id()],
             ['year', now()->year],
-
         ])
         ->pluck('amount_left');
 
@@ -98,7 +97,7 @@ class DashboardController extends Controller implements HasMiddleware
                 'incomeSum' => $incomeSum,
                 'expenseSum' => $expenseSum,
                 'balanceSum' => $balanceSum,
-                'netWorthSum' => $incomeSum,
+                'netWorthSum' => $netWorthSum, //$incomeSum
             ],
 
             'budgetChart' => fn() => $this->budgetChart(),

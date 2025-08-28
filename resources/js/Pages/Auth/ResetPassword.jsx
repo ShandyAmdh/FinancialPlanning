@@ -25,7 +25,7 @@ export default function ResetPassword({ token, email }) {
         <GuestLayout>
             <Head title="Reset Password" />
 
-            <form onSubmit={submit}>
+            <form onSubmit={submit} method="POST">
                 <div>
                     <InputLabel htmlFor="email" value="Email" />
 
@@ -73,6 +73,20 @@ export default function ResetPassword({ token, email }) {
                     />
 
                     <InputError message={errors.password_confirmation} className="mt-2" />
+                </div>
+
+                <div className="mt-4">
+                    <TextInput
+                        type="hidden"
+                        id="token"
+                        name="token"
+                        value={data.token}
+                        className="mt-1 block w-full"
+                        autoComplete="new-password"
+                        onChange={(e) => setData('token', e.target.value)}
+                    />
+
+                    <InputError message={errors.token} className="mt-2" />
                 </div>
 
                 <div className="mt-4 flex items-center justify-end">

@@ -101,7 +101,7 @@ Route::controller(DashboardController::class)->group(function(){
 });
 
 Route::get('/saran-keuangan', [FinancialSuggestionController::class, 'index'])
-    ->name('saran.keuangan');
+    ->middleware('auth')->name('saran.keuangan');
 
 Route::middleware('auth')->controller(PaymentController::class)->group(function(){
     Route::get('payments', 'index')->name('payments.index');

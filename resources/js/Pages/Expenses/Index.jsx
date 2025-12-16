@@ -176,6 +176,19 @@ export default function Index(props) {
                                         <Button
                                             variant="ghost"
                                             className="group inline-flex"
+                                            onClick={() => onShortable('file_path')}
+                                        >
+                                            Bukti
+                                            <span className="ml-2 flex-none rounded text-muted-foreground">
+                                                <IconArrowsDownUp className="size-4" />
+                                            </span>
+                                        </Button>
+                                    </TableHead>
+
+                                    <TableHead>
+                                        <Button
+                                            variant="ghost"
+                                            className="group inline-flex"
                                             onClick={() => onShortable('month')}
                                         >
                                             Bulan
@@ -226,6 +239,20 @@ export default function Index(props) {
                                         <TableCell>{expense.typeDetail.detail}</TableCell>
                                         <TableCell>{expense.payment?.name}</TableCell>
                                         <TableCell>{expense.notes}</TableCell>
+                                        <TableCell>
+                                            {expense.file_path ? (
+                                                <a
+                                                    href={`/storage/${expense.file_path}`}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="text-blue-500 underline"
+                                                >
+                                                    Lihat File
+                                                </a>
+                                            ) : (
+                                                '-'
+                                            )}
+                                        </TableCell>
                                         <TableCell>
                                             <Badge variant={MONTHTYPEVARIANT[expense.month]}>{expense.month}</Badge>
                                         </TableCell>

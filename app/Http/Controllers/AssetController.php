@@ -80,7 +80,7 @@ class AssetController extends Controller implements HasMiddleware
                 'action' => route('assets.store', $netWorth),
             ],
 
-             'items' => fn() => [
+            'items' => fn() => [
                 ['label' => 'Cuan+', 'href' => route('dashboard')],
                 ['label' => 'Kekayaan Bersih', 'href' => route('net-worths.index')],
                 ['label' => $netWorth->id, 'href' => route('net-worths.show', $netWorth)],
@@ -113,7 +113,7 @@ class AssetController extends Controller implements HasMiddleware
         }
     }
 
-     public function edit(NetWorth $netWorth, Asset $asset): Response
+    public function edit(NetWorth $netWorth, Asset $asset): Response
     {
         return inertia('Assets/Edit', [
                 'pageSettings' => fn () => [
@@ -156,7 +156,7 @@ class AssetController extends Controller implements HasMiddleware
         }
     }
 
-     public function destroy(NetWorth $netWorth, Asset $asset): RedirectResponse
+    public function destroy(NetWorth $netWorth, Asset $asset): RedirectResponse
     {
         try{
             $asset->delete();

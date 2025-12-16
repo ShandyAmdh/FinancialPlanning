@@ -28,7 +28,7 @@ class BudgetController extends Controller implements HasMiddleware
     }
 
     public function index(): Response
-     {
+    {
 
         $budgets = Budget::query()
             ->select(['id','user_id', 'detail', 'nominal', 'month', 'year', 'type', 'created_at'])
@@ -104,9 +104,8 @@ class BudgetController extends Controller implements HasMiddleware
             ]
         ]);
     }
-   
 
-     public function create(): Response
+    public function create(): Response
     {
         return inertia('Budgets/Create', [
                 'pageSettings' => fn () => [
@@ -116,7 +115,7 @@ class BudgetController extends Controller implements HasMiddleware
                 'action' => route('budgets.store'),
             ],
 
-             'items' => fn() => [
+            'items' => fn() => [
                 ['label' => 'Cuan+', 'href' => route('dashboard')],
                 ['label' => 'anggaran', 'href' => route('budgets.index')],
                 ['label' => 'Tambah anggaran'],

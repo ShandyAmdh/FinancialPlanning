@@ -72,7 +72,7 @@ class BalanceController extends Controller implements HasMiddleware
         ]);
     }
 
-     public function create(Goal $goal): Response
+    public function create(Goal $goal): Response
     {
 
         return inertia('Savings/Balances/Create',[

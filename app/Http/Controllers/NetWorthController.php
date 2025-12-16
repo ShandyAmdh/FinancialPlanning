@@ -77,13 +77,13 @@ class NetWorthController extends Controller implements HasMiddleware
                 'action' => route('net-worths.store'),
             ],
 
-             'items' => fn() => [
+            'items' => fn() => [
                 ['label' => 'Cuan+', 'href' => route('dashboard')],
                 ['label' => 'Kekayaan Bersih', 'href' => route('net-worths.index')],
                 ['label' => 'Tambah Kekayaan Bersih'],
             ],
 
-           'years' => fn() => range(2020, now()->year),
+        'years' => fn() => range(2020, now()->year),
         ]);
     }
 
@@ -123,7 +123,7 @@ class NetWorthController extends Controller implements HasMiddleware
                 'subtitle' => 'Menampilkan detail kekayaan bersih yang anda miliki',
             ],
 
-             'items' => fn() => [
+            'items' => fn() => [
                 ['label' => 'Cuan+', 'href' => route('dashboard')],
                 ['label' => 'Kekayaan Bersih', 'href' => route('net-worths.index')],
                 ['label' => $netWorth->id],
@@ -137,7 +137,7 @@ class NetWorthController extends Controller implements HasMiddleware
             'netWorthLiabilitySummaries' => fn() => $netWorthLiabilitySummaries,
         ]);
     }
- 
+
     public function edit(NetWorth $netWorth): Response
     {
         return inertia('NetWorths/Edit', [
@@ -342,9 +342,8 @@ class NetWorthController extends Controller implements HasMiddleware
         ];
     }
 
-
     // BATAS BAGIAN INI UNTUK DETAIL LIABILITY
-     private function getLiabilityTransactions(Liability $liability)
+    private function getLiabilityTransactions(Liability $liability)
     {
         return NetWorthLiability::query()
             ->where('liability_id', $liability->id)

@@ -8,6 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Enum;
 
+
 class ExpenseRequest extends FormRequest
 {
     /**
@@ -66,6 +67,12 @@ class ExpenseRequest extends FormRequest
                 'required',
                 'exists:payments,id',
             ],
+            'file' => [
+                'nullable',
+                'file',
+                'mimes:jpg,jpeg,png,pdf,doc,docx',
+                'max:2048', // maksimal 2MB
+            ],
         ];
     }
 
@@ -81,6 +88,7 @@ class ExpenseRequest extends FormRequest
             'month' => 'Bulan',
             'year' => 'Tahun',
             'payment_id' => 'Pembayaran',
+            'file' => 'Bukti Pengeluaran',
         ];
     }
 }

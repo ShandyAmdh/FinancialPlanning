@@ -53,12 +53,18 @@ class DashboardController extends Controller implements HasMiddleware
         ->get()
         ->sum(fn($goal) => $goal->balances->sum('amount') + $goal->beginning_balance);
 
+        // $netWorthSum = NetWorth::query()
+        // ->where([
+        //     ['user_id', Auth::id()],
+        //     ['year', now()->year],
+        // ])
+        // ->pluck('amount_left');
+
         $netWorthSum = NetWorth::query()
-        ->where([
-            ['user_id', Auth::id()],
-            ['year', now()->year],
-        ])
-        ->pluck('amount_left');
+    ->where('user_id', Auth::id())
+    ->where('year', now()->year)
+    ->sum('current_net_worth');
+
 
         $goals = Goal::query()
             ->select(['id', 'user_id', 'name', 'percentage', 'nominal', 'beginning_balance', 'deadline', 'created_at'])

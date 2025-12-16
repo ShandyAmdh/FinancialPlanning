@@ -21,6 +21,8 @@ class ExpenseResource extends JsonResource
             'nominal' => $this->nominal,
             'type' => $this->type,
             'notes' => $this->notes,
+            'file_path' => $this->file_path,
+            'file_url' => $this->file_path ? asset('storage/' . $this->file_path) : null,
             'month' => $this->month,
             'year' => $this->year,
             'created_at' => $this->created_at,

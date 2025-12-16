@@ -35,13 +35,22 @@ export default function Create(props) {
         payment_id: null,
         month: null,
         year: null,
+        file: null,
         _method: props.pageSettings.method,
     });
 
-    const onHandleChange = (e) => setData(e.target.name, e.target.value);
+    const onHandleChange = (e) => {
+        setData(e.target.name, e.target.value, e.target.type, e.target.files);
+        if (type === 'file') {
+            setData(name, files[0]);
+        } else {
+            setData(name, value);
+        }
+    };
     const onHandleSubmit = (e) => {
         e.preventDefault();
         post(props.pageSettings.action, {
+            forceFormData: true,
             preserveScroll: true,
             preserveState: true,
             onSuccess: (success) => {
@@ -103,7 +112,7 @@ export default function Create(props) {
                     </div>
                 </CardHeader>
                 <CardContent>
-                    <form className="space-y-4" onSubmit={onHandleSubmit}>
+                    <form className="space-y-4" onSubmit={onHandleSubmit} encType="multipart/form-data">
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="date">Tanggal</Label>
                             <Input
@@ -231,6 +240,18 @@ export default function Create(props) {
                             ></Textarea>
 
                             {errors.notes && <InputError message={errors.notes} />}
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                            <Label htmlFor="file">Upload Bukti (opsional)</Label>
+                            <Input
+                                type="file"
+                                name="file"
+                                id="file"
+                                accept=".jpg,.jpeg,.png,.pdf"
+                                onChange={(e) => setData('file', e.target.files[0] ?? null)}
+                            />
+                            {errors.file && <InputError message={errors.file} />}
                         </div>
 
                         <div className="flex flex-col gap-2">

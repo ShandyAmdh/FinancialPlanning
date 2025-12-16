@@ -1,6 +1,8 @@
 <?php
 
+
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Storage;
 
 use App\Enums\BudgetType;
 use App\Enums\MessageType;
@@ -34,7 +36,7 @@ class ExpenseController extends Controller implements HasMiddleware
     {
 
         $expenses = Expense::query()
-            ->select(['id', 'user_id', 'date', 'description', 'nominal', 'type', 'type_detail_id', 'payment_id','notes', 'month', 'year', 'created_at'])
+            ->select(['id', 'user_id', 'date', 'description', 'nominal', 'type', 'type_detail_id', 'payment_id','notes', 'file_path', 'year', 'created_at'])
             ->where('user_id', Auth::id())
             ->filter(request()->only(['search', 'month', 'year']))
             ->sorting(request()->only(['field', 'direction']))
@@ -122,6 +124,12 @@ class ExpenseController extends Controller implements HasMiddleware
     public function store(ExpenseRequest $request): RedirectResponse
     {
         try{
+            $filePath = null;
+
+        if ($request->hasFile('file')) {
+            $filePath = $request->file('file')->store('expenses', 'public');
+        }
+
             Expense::create([
                 'user_id' => Auth::id(),
                 'date' => $request->date,
@@ -133,6 +141,7 @@ class ExpenseController extends Controller implements HasMiddleware
                 'notes' => $request->notes,
                 'month' => $request->month,
                 'year' => $request->year,
+                'file_path' => $filePath, // simpan path file
             ]);
 
             flashMessage(MessageType::CREATED->message('Pengeluaran'));
@@ -144,7 +153,7 @@ class ExpenseController extends Controller implements HasMiddleware
         }
     }
 
-      public function edit (Expense $expense): Response
+    public function edit (Expense $expense): Response
     {
         return inertia('Expenses/Create', [
                 'pageSettings' => fn () => [
@@ -197,6 +206,15 @@ class ExpenseController extends Controller implements HasMiddleware
     public function update(Expense $expense ,ExpenseRequest $request): RedirectResponse
     {
         try{
+            $filePath = $expense->file_path;
+
+        if ($request->hasFile('file')) {
+            if ($filePath && \Illuminate\Support\Facades\Storage::disk('public')->exists($filePath)) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($filePath);
+            }
+            $filePath = $request->file('file')->store('expenses', 'public');
+        }
+
             $expense->update([
                 'date' => $request->date,
                 'description' => $request->description,
@@ -207,6 +225,7 @@ class ExpenseController extends Controller implements HasMiddleware
                 'notes' => $request->notes,
                 'month' => $request->month,
                 'year' => $request->year,
+                'file_path' => $filePath,
             ]);
 
             flashMessage(MessageType::UPDATED->message('Pengeluaran'));

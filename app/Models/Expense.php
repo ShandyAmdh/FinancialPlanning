@@ -25,6 +25,7 @@ class Expense extends Model
     'notes',
     'month',
     'year',
+    'file_path',
     ];
 
     public function casts(): array

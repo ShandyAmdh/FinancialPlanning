@@ -43,7 +43,6 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 // Lupa password
 Route::middleware('guest')->group(function () {
     Route::get('/', [AuthenticatedSessionController::class, 'create'])->name('login');
-
     Route::get('/forgot-password', function () {
         return Inertia ('Auth.ForgotPassword',[
             'status' => session('status')

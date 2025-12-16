@@ -69,7 +69,7 @@ class IncomeController extends Controller implements HasMiddleware
         ]);
     }
 
-     public function create(): Response
+    public function create(): Response
     {
         return inertia('Incomes/Create', [
                 'pageSettings' => fn () => [

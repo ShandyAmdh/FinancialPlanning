@@ -132,7 +132,7 @@ class GoalController extends Controller implements HasMiddleware
 
             'goal' =>fn()=>$goal, 
 
-             'items' => fn() => [
+            'items' => fn() => [
                 ['label' => 'Cuan+', 'href' => route('dashboard')],
                 ['label' => 'Tabungan', 'href' => route('goals.index')],
                 ['label' => 'Perbarui Tujuan Menabung'],

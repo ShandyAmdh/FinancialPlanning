@@ -146,7 +146,7 @@ class PaymentController extends Controller implements HasMiddleware
         }
     }
 
-       public function destroy(Payment $payment): RedirectResponse
+    public function destroy(Payment $payment): RedirectResponse
     {
         try{
             $payment->delete();

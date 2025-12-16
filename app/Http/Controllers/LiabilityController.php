@@ -29,7 +29,7 @@ class LiabilityController extends Controller implements HasMiddleware
         ];
     }
 
-     public function index(NetWorth $netWorth): Response
+    public function index(NetWorth $netWorth): Response
     {
 
         $liabilities = Liability::query()
@@ -79,7 +79,7 @@ class LiabilityController extends Controller implements HasMiddleware
                 'action' => route('liabilities.store', $netWorth),
             ],
 
-             'items' => fn() => [
+            'items' => fn() => [
                 ['label' => 'Cuan+', 'href' => route('dashboard')],
                 ['label' => 'Kekayaan Bersih', 'href' => route('net-worths.index')],
                 ['label' => $netWorth->id, 'href' => route('net-worths.show', $netWorth)],
@@ -112,7 +112,7 @@ class LiabilityController extends Controller implements HasMiddleware
         }
     }
 
-     public function edit(NetWorth $netWorth, Liability $liability): Response
+    public function edit(NetWorth $netWorth, Liability $liability): Response
     {
         return inertia('Liabilities/Edit', [
                 'pageSettings' => fn () => [
@@ -122,7 +122,7 @@ class LiabilityController extends Controller implements HasMiddleware
                 'action' => route('liabilities.update', [$netWorth, $liability]),
             ],
 
-             'items' => fn() => [
+            'items' => fn() => [
                 ['label' => 'Cuan+', 'href' => route('dashboard')],
                 ['label' => 'Kekayaan Bersih', 'href' => route('net-worths.index')],
                 ['label' => $netWorth->id, 'href' => route('net-worths.show', $netWorth)],
@@ -155,10 +155,10 @@ class LiabilityController extends Controller implements HasMiddleware
         }
     }
 
-     public function destroy(NetWorth $netWorth , Liability $liability): RedirectResponse
+    public function destroy(NetWorth $netWorth , Liability $liability): RedirectResponse
     {
         try{
-           $liability->delete();
+        $liability->delete();
 
             flashMessage(MessageType::DELETED->message('kewajiban'));
             return to_route('liabilities.index', $netWorth);
